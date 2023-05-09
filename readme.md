@@ -1,0 +1,2 @@
+# MyMemo
+vite + React + TypeScript
