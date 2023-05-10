@@ -1,6 +1,6 @@
-export type ToDo = {
+export type ToDoFormat = {
   value: string;
   readonly id: number;
-  // checked: boolean;
+  isChecked?: boolean;
   isRemoved: boolean;
 };

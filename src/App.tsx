@@ -1,34 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ToDoFormat } from './types/ToDoFormat';
 import './App.css';
-import { ToDo } from './types/ToDo';
+import './style.css';
 
 let idCount = 0;
 
 export const App = () => {
-  const [task, setTask] = useState<string>('');
-  const [taskArray, setTaskArray] = useState<ToDo[]>([]);
+  const [text, setText] = useState<string>('');
+  const [todoArray, setTodoArray] = useState<ToDoFormat[]>([]);
+  const [doneArray, setdoneArray] = useState<ToDoFormat[]>([]);
+  const [allTodoArray, setAllTodoArray] = useState<ToDoFormat[]>([]);
 
-  const createTask = () => {
+  const createTodo = () => {
     idCount++;
-    const addTask: ToDo = {
-      value: task,
+    const addTodo: ToDoFormat = {
+      value: text,
       id: idCount,
+      isChecked: false,
       isRemoved: false,
     };
-    setTaskArray((prev) => [...prev, addTask]);
-    setTask(() => '');
+    if (todoArray.length > 0) {
+      setTodoArray((prev) => [...prev, addTodo]);
+    } else {
+      setTodoArray([addTodo]);
+    }
+    setText(() => '');
   };
-  const removeTask = (index: number) => {
-    setTaskArray((prev) => prev.filter((t) => t.id !== index));
+  const createDoneTodos = (id: number) => {
+    const doneTodo: ToDoFormat | undefined = todoArray.find((v) => v.id === id);
+    if (doneTodo !== undefined) setdoneArray((prev) => [...prev, doneTodo]);
+    setTodoArray((prev) => prev.filter((v) => v.id !== id));
   };
+  useEffect(() => {
+    setAllTodoArray([...todoArray, ...doneArray]);
+  }, [todoArray, doneArray]);
 
   let tasks: JSX.Element[] | undefined;
-  if (taskArray.length > 0) {
-    tasks = taskArray.map((v) => {
+  if (todoArray.length > 0) {
+    tasks = allTodoArray.map((v) => {
       return (
         <li key={v.id.toString()}>
           {v.value}
-          <button onClick={() => removeTask(v.id)}>x</button>
+          <button onClick={() => createDoneTodos(v.id)}>x</button>
         </li>
       );
     });
@@ -39,10 +52,10 @@ export const App = () => {
       <header>Welcome to vite + React + TypeScript</header>
       <input
         type="input"
-        value={task}
-        onChange={(event) => setTask(event.target.value)}
+        value={text}
+        onChange={(event) => setText(event.target.value)}
       />
-      <button onClick={createTask}>add task</button>
+      <button onClick={createTodo}>add task</button>
       <ul>{tasks}</ul>
     </>
   );
