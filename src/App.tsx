@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-
-type ToDo = {
-  value: string;
-  readonly id: number;
-  // checked: boolean;
-  isRemoved: boolean;
-};
+import { ToDo } from './types/ToDo';
 
 let idCount = 0;
 
