@@ -13,7 +13,7 @@ export const App = () => {
   const [doneArray, setDoneArray] = useState<ToDoFormat[]>([]);
   const [closedArray, setClosedArray] = useState<ToDoFormat[]>([]);
 
-  const setTodoLists = (id: number, from: string) => {
+  const refreshTodoLists = (id: number, from: string) => {
     switch (from) {
       case 'todo':
         return setTodoArray(prev => prev.filter(v => v.id !== id));
@@ -52,7 +52,7 @@ export const App = () => {
     else setTodoArray([addTodo]);
     setNewTodoText(() => '');
   };
-  const setReturnTodos = (id: number, from: string) => {
+  const refreshReturnTodos = (id: number, from: string) => {
     nowTime = new Date();
     const returnTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (returnTodo !== undefined) {
@@ -61,9 +61,9 @@ export const App = () => {
       returnTodo.lastModifiedDateTime = nowTime;
       setTodoArray(prev => [...prev, returnTodo]);
     }
-    setTodoLists(id, from);
+    refreshTodoLists(id, from);
   };
-  const setDoneTodos = (id: number, from: string) => {
+  const refreshDoneTodos = (id: number, from: string) => {
     nowTime = new Date();
     const doneTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (doneTodo !== undefined) {
@@ -71,9 +71,9 @@ export const App = () => {
       doneTodo.doneDateTime = nowTime;
       setDoneArray(prev => [...prev, doneTodo]);
     }
-    setTodoLists(id, from);
+    refreshTodoLists(id, from);
   };
-  const setClosedTodos = (id: number, from: string) => {
+  const refreshClosedTodos = (id: number, from: string) => {
     nowTime = new Date();
     const closedTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (closedTodo !== undefined) {
@@ -81,7 +81,7 @@ export const App = () => {
       closedTodo.closedDateTime = nowTime;
       setClosedArray(prev => [...prev, closedTodo]);
     }
-    setTodoLists(id, from);
+    refreshTodoLists(id, from);
   };
 
   let tasksTodo: JSX.Element[] | undefined;
@@ -90,8 +90,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()}>
           {v.value}
-          <button onClick={() => setDoneTodos(v.id, 'todo')}>done</button>
-          <button onClick={() => setClosedTodos(v.id, 'todo')}>close</button>
+          <button onClick={() => refreshDoneTodos(v.id, 'todo')}>done</button>
+          <button onClick={() => refreshClosedTodos(v.id, 'todo')}>close</button>
         </li>
       );
     });
@@ -102,8 +102,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isDone ? 'done' : ''}`}>
           {v.value}
-          <button onClick={() => setReturnTodos(v.id, 'done')}>return</button>
-          <button onClick={() => setClosedTodos(v.id, 'done')}>close</button>
+          <button onClick={() => refreshReturnTodos(v.id, 'done')}>return</button>
+          <button onClick={() => refreshClosedTodos(v.id, 'done')}>close</button>
         </li>
       );
     });
@@ -114,8 +114,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isClosed ? 'done closed' : ''}`}>
           {v.value}
-          <button onClick={() => setReturnTodos(v.id, 'closed')}>return</button>
-          <button onClick={() => setDoneTodos(v.id, 'closed')}>done</button>
+          <button onClick={() => refreshReturnTodos(v.id, 'closed')}>return</button>
+          <button onClick={() => refreshDoneTodos(v.id, 'closed')}>done</button>
         </li>
       );
     });
