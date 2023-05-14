@@ -52,7 +52,18 @@ export const App = () => {
     else setTodoArray([addTodo]);
     setNewTodoText(() => '');
   };
-  const createDoneTodos = (id: number, from: string) => {
+  const setReturnTodos = (id: number, from: string) => {
+    nowTime = new Date();
+    const returnTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
+    if (returnTodo !== undefined) {
+      returnTodo.isDone = false;
+      returnTodo.isClosed = false;
+      returnTodo.lastModifiedDateTime = nowTime;
+      setTodoArray(prev => [...prev, returnTodo]);
+    }
+    setTodoLists(id, from);
+  };
+  const setDoneTodos = (id: number, from: string) => {
     nowTime = new Date();
     const doneTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (doneTodo !== undefined) {
@@ -62,7 +73,7 @@ export const App = () => {
     }
     setTodoLists(id, from);
   };
-  const createClosedTodos = (id: number, from: string) => {
+  const setClosedTodos = (id: number, from: string) => {
     nowTime = new Date();
     const closedTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (closedTodo !== undefined) {
@@ -79,8 +90,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()}>
           {v.value}
-          <button onClick={() => createDoneTodos(v.id, 'todo')}>done</button>
-          <button onClick={() => createClosedTodos(v.id, 'todo')}>close</button>
+          <button onClick={() => setDoneTodos(v.id, 'todo')}>done</button>
+          <button onClick={() => setClosedTodos(v.id, 'todo')}>close</button>
         </li>
       );
     });
@@ -91,7 +102,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isDone ? 'done' : ''}`}>
           {v.value}
-          <button onClick={() => createClosedTodos(v.id, 'done')}>close</button>
+          <button onClick={() => setReturnTodos(v.id, 'done')}>return</button>
+          <button onClick={() => setClosedTodos(v.id, 'done')}>close</button>
         </li>
       );
     });
@@ -102,7 +114,8 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isClosed ? 'done closed' : ''}`}>
           {v.value}
-          {/* <button onClick={() => createClosedTodos(v.id, 'done')}>close</button> */}
+          <button onClick={() => setReturnTodos(v.id, 'closed')}>return</button>
+          <button onClick={() => setDoneTodos(v.id, 'closed')}>done</button>
         </li>
       );
     });
