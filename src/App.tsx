@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 import { ToDoFormat } from './types/ToDoFormat';
 import './App.css';
@@ -8,22 +8,28 @@ let idCount = 0;
 let nowTime: Date;
 
 export const App = () => {
-  const [newTodo, setNewTodo] = useState<string>('');
+  const [newTodoText, setNewTodoText] = useState<string>('');
   const [todoArray, setTodoArray] = useState<ToDoFormat[]>([]);
   const [doneArray, setDoneArray] = useState<ToDoFormat[]>([]);
-  const [allTodoArray, setAllTodoArray] = useState<ToDoFormat[]>([]);
+  // const [closedArray, setClosedArray] = useState<ToDoFormat[]>([]);
 
-  // todo,done,closedそれぞれで検索するべきかな
-  useEffect(() => {
-    setAllTodoArray([...todoArray, ...doneArray]);
-  }, [todoArray, doneArray]);
-  const setTargetTodo = (id: number) => allTodoArray.find(v => v.id === id);
-
+  const retrieveTargetTodo = (id: number, from: string) => {
+    switch (from) {
+      case 'todo':
+        return todoArray.find(v => v.id === id);
+      case 'done':
+        return doneArray.find(v => v.id === id);
+      // case 'closed':
+      //   return closedArray.find(v => v.id === id);
+      default:
+        return;
+    }
+  };
   const createTodo = () => {
     idCount++;
     nowTime = new Date();
     const addTodo: ToDoFormat = {
-      value: newTodo,
+      value: newTodoText,
       id: idCount,
       isDone: false,
       isClosed: false,
@@ -32,11 +38,11 @@ export const App = () => {
     };
     if (todoArray.length > 0) setTodoArray(prev => [...prev, addTodo]);
     else setTodoArray([addTodo]);
-    setNewTodo(() => '');
+    setNewTodoText(() => '');
   };
-  const createDoneTodos = (id: number) => {
+  const createDoneTodos = (id: number, from: string) => {
     nowTime = new Date();
-    const doneTodo: ToDoFormat | undefined = setTargetTodo(id);
+    const doneTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (doneTodo !== undefined) {
       doneTodo.isDone = true;
       doneTodo.doneDateTime = nowTime;
@@ -51,7 +57,7 @@ export const App = () => {
       return (
         <li key={v.id.toString()}>
           {v.value}
-          <button onClick={() => createDoneTodos(v.id)}>done</button>
+          <button onClick={() => createDoneTodos(v.id, 'todo')}>done</button>
           {/* <button onClick={() => createDoneTodos(v.id)}>close</button> */}
         </li>
       );
@@ -63,7 +69,6 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isDone ? 'done' : ''}`}>
           {v.value}
-          {/* <button onClick={() => createDoneTodos(v.id)}>done</button> */}
           {/* <button onClick={() => createDoneTodos(v.id)}>close</button> */}
         </li>
       );
@@ -72,7 +77,11 @@ export const App = () => {
   return (
     <>
       <header>Welcome to vite + React + TypeScript</header>
-      <input type="input" value={newTodo} onChange={event => setNewTodo(event.target.value)} />
+      <input
+        type="input"
+        value={newTodoText}
+        onChange={event => setNewTodoText(event.target.value)}
+      />
       <button onClick={createTodo}>add task</button>
       <ul>
         {tasksTodo !== undefined && tasksTodo?.length > 0 ? tasksTodo : null}
