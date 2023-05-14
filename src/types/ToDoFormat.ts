@@ -2,10 +2,10 @@ export type ToDoFormat = {
   value: string;
   readonly id: number;
   isDone: boolean;
-  isRemoved: boolean;
+  isClosed: boolean;
   isModifing: boolean;
   readonly createdDateTime: Date;
   lastModifiedDateTime?: Date;
-  doneDateTime?: Date;
-  removedDateTime?: Date;
+  doneDateTime?: Date | undefined;
+  closedDateTime?: Date | undefined;
 };
