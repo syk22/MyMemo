@@ -1,6 +1,11 @@
 export type ToDoFormat = {
   value: string;
   readonly id: number;
-  isChecked?: boolean;
+  isDone: boolean;
   isRemoved: boolean;
+  isModifing: boolean;
+  readonly createdDateTime: Date;
+  lastModifiedDateTime?: Date;
+  doneDateTime?: Date;
+  removedDateTime?: Date;
 };
