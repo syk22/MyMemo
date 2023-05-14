@@ -1,8 +1,8 @@
 import { useState } from 'react';
 // import { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 import { ToDoFormat } from './types/ToDoFormat';
-import './App.css';
-import './style.css';
+import './styles/App.css';
+import './styles/style.css';
 
 let idCount = 0;
 let nowTime: Date;
@@ -84,12 +84,32 @@ export const App = () => {
     refreshTodoLists(id, from);
   };
 
+  const modifiedTodo = (id: number) => {
+    // ひとまずTodoからのみ
+    const tempArray: ToDoFormat[] = [];
+    todoArray.forEach(v => {
+      if (v.id === id) v.isModifing = true;
+      tempArray.push(v);
+    });
+    setTodoArray(tempArray);
+  };
+  // let modifiedTodo: JSX.Element | undefined;
+
   let tasksTodo: JSX.Element[] | undefined;
   if (todoArray.length > 0) {
     tasksTodo = todoArray.map(v => {
+      if (v.isModifing) {
+        return (
+          <li key={v.id.toString()}>
+            <input type="type" />
+            <button>fix</button>
+          </li>
+        );
+      }
       return (
         <li key={v.id.toString()}>
           {v.value}
+          <button onClick={() => modifiedTodo(v.id)}>modify</button>
           <button onClick={() => refreshDoneTodos(v.id, 'todo')}>done</button>
           <button onClick={() => refreshClosedTodos(v.id, 'todo')}>close</button>
         </li>
