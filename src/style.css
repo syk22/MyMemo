@@ -1,4 +1,6 @@
 .done {
   color: #999;
+}
+.closed {
   text-decoration: line-through;
 }

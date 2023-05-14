@@ -11,16 +11,28 @@ export const App = () => {
   const [newTodoText, setNewTodoText] = useState<string>('');
   const [todoArray, setTodoArray] = useState<ToDoFormat[]>([]);
   const [doneArray, setDoneArray] = useState<ToDoFormat[]>([]);
-  // const [closedArray, setClosedArray] = useState<ToDoFormat[]>([]);
+  const [closedArray, setClosedArray] = useState<ToDoFormat[]>([]);
 
+  const setTodoLists = (id: number, from: string) => {
+    switch (from) {
+      case 'todo':
+        return setTodoArray(prev => prev.filter(v => v.id !== id));
+      case 'done':
+        return setDoneArray(prev => prev.filter(v => v.id !== id));
+      case 'closed':
+        return setClosedArray(prev => prev.filter(v => v.id !== id));
+      default:
+        return;
+    }
+  };
   const retrieveTargetTodo = (id: number, from: string) => {
     switch (from) {
       case 'todo':
         return todoArray.find(v => v.id === id);
       case 'done':
         return doneArray.find(v => v.id === id);
-      // case 'closed':
-      //   return closedArray.find(v => v.id === id);
+      case 'closed':
+        return closedArray.find(v => v.id === id);
       default:
         return;
     }
@@ -48,7 +60,17 @@ export const App = () => {
       doneTodo.doneDateTime = nowTime;
       setDoneArray(prev => [...prev, doneTodo]);
     }
-    setTodoArray(prev => prev.filter(v => v.id !== id));
+    setTodoLists(id, from);
+  };
+  const createClosedTodos = (id: number, from: string) => {
+    nowTime = new Date();
+    const closedTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
+    if (closedTodo !== undefined) {
+      closedTodo.isClosed = true;
+      closedTodo.closedDateTime = nowTime;
+      setClosedArray(prev => [...prev, closedTodo]);
+    }
+    setTodoLists(id, from);
   };
 
   let tasksTodo: JSX.Element[] | undefined;
@@ -58,7 +80,7 @@ export const App = () => {
         <li key={v.id.toString()}>
           {v.value}
           <button onClick={() => createDoneTodos(v.id, 'todo')}>done</button>
-          {/* <button onClick={() => createDoneTodos(v.id)}>close</button> */}
+          <button onClick={() => createClosedTodos(v.id, 'todo')}>close</button>
         </li>
       );
     });
@@ -69,11 +91,23 @@ export const App = () => {
       return (
         <li key={v.id.toString()} className={`${v.isDone ? 'done' : ''}`}>
           {v.value}
-          {/* <button onClick={() => createDoneTodos(v.id)}>close</button> */}
+          <button onClick={() => createClosedTodos(v.id, 'done')}>close</button>
         </li>
       );
     });
   }
+  let tasksClosed: JSX.Element[] | undefined;
+  if (closedArray.length > 0) {
+    tasksClosed = closedArray.map(v => {
+      return (
+        <li key={v.id.toString()} className={`${v.isClosed ? 'done closed' : ''}`}>
+          {v.value}
+          {/* <button onClick={() => createClosedTodos(v.id, 'done')}>close</button> */}
+        </li>
+      );
+    });
+  }
+
   return (
     <>
       <header>Welcome to vite + React + TypeScript</header>
@@ -86,6 +120,7 @@ export const App = () => {
       <ul>
         {tasksTodo !== undefined && tasksTodo?.length > 0 ? tasksTodo : null}
         {tasksDone !== undefined && tasksDone?.length > 0 ? tasksDone : null}
+        {tasksClosed !== undefined && tasksClosed?.length > 0 ? tasksClosed : null}
       </ul>
     </>
   );
