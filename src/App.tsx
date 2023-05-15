@@ -5,15 +5,15 @@ import './styles/App.css';
 import './styles/style.css';
 
 let idCount = 0;
-let nowTime: Date;
 
 export const App = () => {
-  const [newTodoText, setNewTodoText] = useState<string>('');
   const [todoArray, setTodoArray] = useState<ToDoFormat[]>([]);
   const [doneArray, setDoneArray] = useState<ToDoFormat[]>([]);
   const [closedArray, setClosedArray] = useState<ToDoFormat[]>([]);
+  // const [modifiedTodoMap, setModifiedTodoMap] = useState<Map<number, string>>();
 
-  const refreshTodoLists = (id: number, from: string) => {
+  const returnNowTime = () => new Date();
+  const resetTodoLists = (id: number, from: string) => {
     switch (from) {
       case 'todo':
         return setTodoArray(prev => prev.filter(v => v.id !== id));
@@ -39,50 +39,58 @@ export const App = () => {
   };
   const createTodo = () => {
     idCount++;
-    nowTime = new Date();
-    const addTodo: ToDoFormat = {
-      value: newTodoText,
-      id: idCount,
-      isDone: false,
-      isClosed: false,
-      isModifing: false,
-      createdDateTime: nowTime,
-    };
-    if (todoArray.length > 0) setTodoArray(prev => [...prev, addTodo]);
-    else setTodoArray([addTodo]);
-    setNewTodoText(() => '');
+    const getAddTodoText: HTMLInputElement = document.getElementById(
+      'new-add-todo'
+    ) as HTMLInputElement;
+    const addTodoText: string | undefined = getAddTodoText?.value;
+    if (addTodoText !== undefined) {
+      const addTodo: ToDoFormat = {
+        value: addTodoText,
+        id: idCount,
+        isDone: false,
+        isClosed: false,
+        isModifing: false,
+        createdDateTime: returnNowTime(),
+      };
+      if (todoArray.length > 0) setTodoArray(prev => [...prev, addTodo]);
+      else setTodoArray([addTodo]);
+    }
+    getAddTodoText.value = '';
   };
   const refreshReturnTodos = (id: number, from: string) => {
-    nowTime = new Date();
     const returnTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (returnTodo !== undefined) {
       returnTodo.isDone = false;
       returnTodo.isClosed = false;
-      returnTodo.lastModifiedDateTime = nowTime;
+      returnTodo.lastModifiedDateTime = returnNowTime();
       setTodoArray(prev => [...prev, returnTodo]);
     }
-    refreshTodoLists(id, from);
+    resetTodoLists(id, from);
   };
   const refreshDoneTodos = (id: number, from: string) => {
-    nowTime = new Date();
     const doneTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (doneTodo !== undefined) {
       doneTodo.isDone = true;
-      doneTodo.doneDateTime = nowTime;
+      doneTodo.doneDateTime = returnNowTime();
       setDoneArray(prev => [...prev, doneTodo]);
     }
-    refreshTodoLists(id, from);
+    resetTodoLists(id, from);
   };
   const refreshClosedTodos = (id: number, from: string) => {
-    nowTime = new Date();
     const closedTodo: ToDoFormat | undefined = retrieveTargetTodo(id, from);
     if (closedTodo !== undefined) {
       closedTodo.isClosed = true;
-      closedTodo.closedDateTime = nowTime;
+      closedTodo.closedDateTime = returnNowTime();
       setClosedArray(prev => [...prev, closedTodo]);
     }
-    refreshTodoLists(id, from);
+    resetTodoLists(id, from);
   };
+
+  /*
+  編集モード
+  Componentに分配するとき、編集するかどうかのisEditingもそれぞれのStateで渡す事はできるのか？
+  Contextで管理しようと思うと困る気がする。。。。
+  やはりもう一度、Map型で管理してみることを考える
 
   const modifiedTodo = (id: number) => {
     // ひとまずTodoからのみ
@@ -93,23 +101,46 @@ export const App = () => {
     });
     setTodoArray(tempArray);
   };
-  // let modifiedTodo: JSX.Element | undefined;
+  const fixedTodo = (id: number, idName: string) => {
+    idCount++;
+    const getFixTodoText: HTMLInputElement = document.getElementById(
+      `modifiedTodo${idName}`
+    ) as HTMLInputElement;
+    const fixTodoText: string | undefined = getFixTodoText?.value;
+    console.log(fixTodoText);
+
+    const returnArray: ToDoFormat[] = [];
+    if (fixTodoText !== undefined) {
+      todoArray.forEach(v => {
+        if (v.id === id) {
+          v.value = fixTodoText;
+          v.lastModifiedDateTime = returnNowTime();
+          v.isModifing = false;
+        }
+        returnArray.push(v);
+      });
+    }
+    setTodoArray(returnArray);
+  };
+  */
 
   let tasksTodo: JSX.Element[] | undefined;
   if (todoArray.length > 0) {
     tasksTodo = todoArray.map(v => {
       if (v.isModifing) {
+        const idName = `modifiedTodo${v.id.toString()}`;
+        const todoText = v.value;
         return (
           <li key={v.id.toString()}>
-            <input type="type" />
-            <button>fix</button>
+            <input type="type" id={idName} value={todoText} />
+            {/* <button onClick={() => fixedTodo(v.id, idName)}>fix</button> */}
           </li>
         );
       }
       return (
         <li key={v.id.toString()}>
           {v.value}
-          <button onClick={() => modifiedTodo(v.id)}>modify</button>
+          {/* <button onClick={() => modifiedTodo(v.id)}>modify</button> */}
           <button onClick={() => refreshDoneTodos(v.id, 'todo')}>done</button>
           <button onClick={() => refreshClosedTodos(v.id, 'todo')}>close</button>
         </li>
@@ -146,8 +177,9 @@ export const App = () => {
       <header>Welcome to vite + React + TypeScript</header>
       <input
         type="input"
-        value={newTodoText}
-        onChange={event => setNewTodoText(event.target.value)}
+        id="new-add-todo"
+        // value={newTodoText}
+        // onChange={event => setNewTodoText(event.target.value)}
       />
       <button onClick={createTodo}>add task</button>
       <ul>
