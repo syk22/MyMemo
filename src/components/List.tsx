@@ -6,6 +6,8 @@ export const List = (props: ToDoFormat) => {
   return (
     <li key={id.toString()} className={`${isDone ? 'done' : ''} ${isClosed ? 'closed' : ''}`}>
       {todoText}
+      {!isDone ? <button>done</button> : null}
+      {!isClosed ? <button>closed</button> : null}
     </li>
   );
 };
