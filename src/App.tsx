@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { ToDoFormat } from './types/ToDoFormat';
 import './styles/App.css';
 import './styles/style.css';
+import { Header } from './components/Header';
+import { List } from './components/List';
 
 let idCount = 0;
 
@@ -46,6 +48,7 @@ export const App = () => {
     if (addTodoText !== undefined) {
       const addTodo: ToDoFormat = {
         value: addTodoText,
+        todoText: addTodoText,
         id: idCount,
         isDone: false,
         isClosed: false,
@@ -86,21 +89,23 @@ export const App = () => {
     resetTodoLists(id, from);
   };
 
+  // const modifiedTodo = (id: number) => {
+  //   // ひとまずTodoからのみ
+  //   const tempArray: ToDoFormat[] = [];
+  //   const tempMap: Map<number, string> = new Map<number, string>();
+  //   todoArray.forEach(v => {
+  //     if (v.id === id) v.isModifing = true;
+  //     tempArray.push(v);
+  //     tempMap.set(v.id, v.value);
+  //   });
+  //   setModifiedTodoMap(tempMap);
+  //   setTodoArray(tempArray);
+  // };
+  // const changeTodo = (id: number, text: string) => {
+  //   setModifiedTodoMap(prev => prev?.set(id, text));
+  // };
   /*
   編集モード
-  Componentに分配するとき、編集するかどうかのisEditingもそれぞれのStateで渡す事はできるのか？
-  Contextで管理しようと思うと困る気がする。。。。
-  やはりもう一度、Map型で管理してみることを考える
-
-  const modifiedTodo = (id: number) => {
-    // ひとまずTodoからのみ
-    const tempArray: ToDoFormat[] = [];
-    todoArray.forEach(v => {
-      if (v.id === id) v.isModifing = true;
-      tempArray.push(v);
-    });
-    setTodoArray(tempArray);
-  };
   const fixedTodo = (id: number, idName: string) => {
     idCount++;
     const getFixTodoText: HTMLInputElement = document.getElementById(
@@ -124,23 +129,29 @@ export const App = () => {
   };
   */
 
+  /*
   let tasksTodo: JSX.Element[] | undefined;
   if (todoArray.length > 0) {
     tasksTodo = todoArray.map(v => {
       if (v.isModifing) {
         const idName = `modifiedTodo${v.id.toString()}`;
-        const todoText = v.value;
+        // const todoText = v.value;
         return (
           <li key={v.id.toString()}>
-            <input type="type" id={idName} value={todoText} />
-            {/* <button onClick={() => fixedTodo(v.id, idName)}>fix</button> */}
+            <input
+              type="type"
+              id={idName}
+              value={modifiedTodoMap?.get(v.id)}
+              onChange={e => setModifiedTodoMap(prev => prev?.set(v.id, e.target.value.toString()))}
+            />
+            <button onClick={() => fixedTodo(v.id, idName)}>fix</button>
           </li>
         );
       }
       return (
         <li key={v.id.toString()}>
           {v.value}
-          {/* <button onClick={() => modifiedTodo(v.id)}>modify</button> */}
+          <button onClick={() => modifiedTodo(v.id)}>modify</button>
           <button onClick={() => refreshDoneTodos(v.id, 'todo')}>done</button>
           <button onClick={() => refreshClosedTodos(v.id, 'todo')}>close</button>
         </li>
@@ -171,10 +182,11 @@ export const App = () => {
       );
     });
   }
+  */
 
   return (
     <>
-      <header>Welcome to vite + React + TypeScript</header>
+      <Header />
       <input
         type="input"
         id="new-add-todo"
@@ -183,9 +195,52 @@ export const App = () => {
       />
       <button onClick={createTodo}>add task</button>
       <ul>
-        {tasksTodo !== undefined && tasksTodo?.length > 0 ? tasksTodo : null}
-        {tasksDone !== undefined && tasksDone?.length > 0 ? tasksDone : null}
-        {tasksClosed !== undefined && tasksClosed?.length > 0 ? tasksClosed : null}
+        {/* {tasksTodo !== undefined && tasksTodo?.length > 0 ? tasksTodo : null} */}
+        {/* {tasksDone !== undefined && tasksDone?.length > 0 ? tasksDone : null} */}
+        {/* {tasksClosed !== undefined && tasksClosed?.length > 0 ? tasksClosed : null} */}
+
+        {todoArray !== undefined && todoArray?.length > 0
+          ? todoArray.map(v => {
+              return (
+                <List
+                  key={v.id.toString()}
+                  todoText={v.todoText}
+                  id={v.id}
+                  isDone={v.isDone}
+                  isClosed={v.isClosed}
+                  isModifing={v.isModifing}
+                />
+              );
+            })
+          : null}
+        {doneArray !== undefined && doneArray?.length > 0
+          ? doneArray.map(v => {
+              return (
+                <List
+                  key={v.id.toString()}
+                  todoText={v.todoText}
+                  id={v.id}
+                  isDone={v.isDone}
+                  isClosed={v.isClosed}
+                  isModifing={v.isModifing}
+                />
+              );
+            })
+          : null}
+        {closedArray !== undefined && closedArray?.length > 0
+          ? closedArray.map(v => {
+              return (
+                <List
+                  key={v.id.toString()}
+                  todoText={v.todoText}
+                  id={v.id}
+                  isDone={v.isDone}
+                  isClosed={v.isClosed}
+                  isModifing={v.isModifing}
+                />
+              );
+            })
+          : null}
       </ul>
     </>
   );
