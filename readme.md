@@ -1,13 +1,12 @@
 # MyMemo
 
-目標から逆算・ブレイクダウンしたタスクを作成してゴールまでの道のりを確認しよう
+目標から逆算・ブレイクダウンしたタスクを作成してゴールまでの道のりを確認しnよう
 
 ## Future Feature
 
 ### MVP
 Component化・カスタムフック化  
-データベース接続  
-ログイン
+データベース接続(Firestore)  
 
 ### High Priority
 タスク修正  
@@ -30,15 +29,17 @@ Enterキーによる入力
 SSR(Next.js)  
 セキュリティ対策  
 レスポンシブ（スタイル）  
-クエリ：GraphQL
+GraphQL
 
 ## Done
 ### MVP
-実行タスク/Done タスク/削除タスク
+実行タスク/Done タスク/削除タスク  
+ログイン(Firebase)
+
 
 ## stack
 React 　
 TypeScript  
 vite
 
-まずはFirebaseかな
+Firebase
