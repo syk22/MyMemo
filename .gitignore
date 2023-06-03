@@ -26,3 +26,6 @@ dist-ssr
 .prettier*
 vite*
 * copy*
+firebase-config.ts
+.github/
+.firebase
