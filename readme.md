@@ -1,12 +1,13 @@
 # MyMemo
 
-目標から逆算・ブレイクダウンしたタスクを作成してゴールまでの道のりを確認しnよう
+目標から逆算・ブレイクダウンしたタスクを作成してゴールまでの道のりを確認しよう
 
 ## Future Feature
 
 ### MVP
 Component化・カスタムフック化  
 データベース接続(Firestore)  
+ログアウト・マイページ機能
 
 ### High Priority
 タスク修正  
@@ -38,7 +39,7 @@ GraphQL
 
 
 ## stack
-React 　
+React  
 TypeScript  
 vite
 
