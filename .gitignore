@@ -25,8 +25,8 @@ dist-ssr
 .env
 .eslint*
 .prettier*
-vite*
 * copy*
 firebase-config.ts
+firebase.ts
 .github/
 .firebase
