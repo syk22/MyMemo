@@ -5,6 +5,7 @@
 ## Future Feature
 
 ### MVP
+ログイン(Firebase)※ログイン自体はできているが、認証確認が取れてから遷移させる  
 Component化・カスタムフック化  
 データベース接続(Firestore)  
 ログアウト 　
@@ -36,7 +37,6 @@ GraphQL
 ## Done
 ### MVP
 実行タスク/Done タスク/削除タスク  
-ログイン(Firebase)
 
 
 ## stack
