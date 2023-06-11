@@ -5,14 +5,13 @@
 ## Future Feature
 
 ### MVP
-ログイン(Firebase)※ログイン自体はできているが、認証確認が取れてから遷移させる  
 Component化・カスタムフック化  
 データベース接続(Firestore)  
-ログアウト 　
-マイページ機能  
 テスト(Jest)  
 
 ### High Priority
+ログイン時の画面遷移  
+マイページ機能  
 タスク修正  
 メモ階層化（３階層ぐらい）  
 作成日/修正日/Done 日/削除日 表示  
@@ -37,6 +36,8 @@ GraphQL
 ## Done
 ### MVP
 実行タスク/Done タスク/削除タスク  
+ログイン  
+ログアウト 　
 
 
 ## stack
