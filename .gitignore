@@ -28,3 +28,4 @@ dist-ssr
 * copy*
 .github/
 .firebase
+dev*.md

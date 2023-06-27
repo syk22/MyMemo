@@ -17,6 +17,7 @@ export const App = memo(() => {
   auth;
   const [userInfo, setUserInfo] = useState(intialUserInfo);
   const [goToSignUpFlag, setSignUpFlag] = useState(true);
+
   const isSignUp = () => {
     try {
       onAuthStateChanged(auth, async user => {
