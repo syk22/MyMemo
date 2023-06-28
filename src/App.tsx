@@ -7,6 +7,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { Header } from './components/Header';
 import { SignUp } from './components/SignUp';
 import { ToDoTasks } from './components/ToDoTasks';
+import { TodoListsProvider } from './components/providers/TodoListsProviders';
+import { AddTodo } from './components/AddTodo';
 
 const intialUserInfo = {
   email: '',
@@ -17,9 +19,10 @@ export const App = memo(() => {
   auth;
   const [userInfo, setUserInfo] = useState(intialUserInfo);
   const [goToSignUpFlag, setSignUpFlag] = useState(true);
+
   const isSignUp = () => {
     try {
-      onAuthStateChanged(auth, async user => {
+      onAuthStateChanged(auth, async (user) => {
         if (!user) {
           setSignUpFlag(true);
         } else {
@@ -45,14 +48,17 @@ export const App = memo(() => {
 
   return (
     <>
-      {goToSignUpFlag ? (
-        <SignUp isSignUp={isSignUp} />
-      ) : (
-        <div>
-          <Header userInfo={userInfo} isSignUp={isSignUp} />
-          <ToDoTasks />
-        </div>
-      )}
+      <TodoListsProvider>
+        {goToSignUpFlag ? (
+          <SignUp isSignUp={isSignUp} />
+        ) : (
+          <div>
+            <Header userInfo={userInfo} isSignUp={isSignUp} />
+            <AddTodo />
+            <ToDoTasks />
+          </div>
+        )}
+      </TodoListsProvider>
     </>
   );
 });

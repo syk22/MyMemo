@@ -5,3 +5,15 @@
   color: #999;
   text-decoration: line-through;
 }
+.todo-list {
+  border-radius: 10px;
+  border: 3px dotted yellowgreen;
+}
+.done-list {
+  border-radius: 10px;
+  border: 3px dotted gray;
+}
+.remove-list {
+  border-radius: 10px;
+  border: 3px dotted pink;
+}
