@@ -1,12 +1,13 @@
 import { createContext, useState } from 'react';
 import { ToDoFormat } from '../../types/ToDoFormat';
+import { TodoListType } from '../../types/ProviderTodoListType';
 
 let idCount = 0;
 
-export const TodoListsContext = createContext([]);
+export const TodoListsContext = createContext({} as TodoListType);
 export const TodoListsProvider = (props: any) => {
   const { children } = props;
-  const [todoList, setTodoList] = useState<ToDoFormat[] | null>([]);
+  const [todoList, setTodoList] = useState([] as ToDoFormat[]);
   const createTodo = () => {
     const returnNowTime = () => new Date();
     const textValue = document.getElementById('todoText') as HTMLInputElement;
@@ -21,7 +22,7 @@ export const TodoListsProvider = (props: any) => {
         isModifing: false,
         createdDateTime: returnNowTime(),
       };
-      if (todoList !== null && todoList.length > 0) setTodoList((prev) => [...prev, addTodo]);
+      if (todoList !== null && todoList.length > 0) setTodoList((prev) => [...(prev as ToDoFormat[]), addTodo]);
       else setTodoList([addTodo]);
     }
     textValue.value = '';

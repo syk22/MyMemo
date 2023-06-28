@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { TodoListsContext } from './providers/TodoListsProviders';
+import { TodoListType } from '../types/ProviderTodoListType';
 
 export const AddTodo = () => {
-  const { createTodo } = useContext(TodoListsContext);
+  const { createTodo } = useContext<TodoListType>(TodoListsContext);
 
   return (
     <>
