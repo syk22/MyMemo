@@ -1,15 +1,25 @@
-// import React from 'react';
+import { useContext } from 'react';
+import { TodoListsContext } from './providers/TodoListsProviders';
 import { ToDoFormat } from '../types/ToDoFormat';
 
-export const List = (props: ToDoFormat) => {
-  const { id, todoText, isDone, isClosed } = props;
+export const List = () => {
+  const { todoList } = useContext(TodoListsContext);
+  let todoArray: JSX.Element[] | undefined;
+  if (todoList.length > 0) {
+    todoArray = todoList.map((v: ToDoFormat) => {
+      return (
+        <>
+          <dt key={v.id.toString()}>{v.id.toString()}</dt>
+          <dd>{v.value}</dd>
+        </>
+      );
+    });
+  }
+
   return (
-    // <li key={id.toString()} className={`${isDone ? 'done' : ''} ${isClosed ? 'closed' : ''}`}>
-    <li key={id.toString()}>
-      {todoText}
-      {isDone || isClosed ? <button>modified</button> : null}
-      {!isDone ? <button>done</button> : null}
-      {!isClosed ? <button>closed</button> : null}
-    </li>
+    <>
+      <h2>TodoList</h2>
+      <dl>{todoArray}</dl>
+    </>
   );
 };

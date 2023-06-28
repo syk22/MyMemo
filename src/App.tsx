@@ -8,8 +8,7 @@ import { Header } from './components/Header';
 import { SignUp } from './components/SignUp';
 import { ToDoTasks } from './components/ToDoTasks';
 import { TodoListsProvider } from './components/providers/TodoListsProviders';
-import { Push } from './components/Push';
-import { Pull } from './components/Pull';
+import { AddTodo } from './components/AddTodo';
 
 const intialUserInfo = {
   email: '',
@@ -55,11 +54,10 @@ export const App = memo(() => {
         ) : (
           <div>
             <Header userInfo={userInfo} isSignUp={isSignUp} />
+            <AddTodo />
             <ToDoTasks />
           </div>
         )}
-        <Push />
-        <Pull />
       </TodoListsProvider>
     </>
   );
