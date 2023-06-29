@@ -8,13 +8,14 @@ export const TodoListsContext = createContext({} as TodoListType);
 export const TodoListsProvider = (props: any) => {
   const { children } = props;
   const [todoList, setTodoList] = useState([] as TodoFormat[]);
+  const [todoDone, setTodoDone] = useState([] as TodoFormat[]);
+  const returnNowTime = () => new Date();
+
   const createTodo = () => {
-    const returnNowTime = () => new Date();
     const textValue = document.getElementById('todoText') as HTMLInputElement;
     idCount++;
     if (textValue !== undefined) {
       const addTodo: TodoFormat = {
-        value: textValue.value,
         todoText: textValue.value,
         id: idCount,
         isDone: false,
@@ -28,5 +29,20 @@ export const TodoListsProvider = (props: any) => {
     textValue.value = '';
   };
 
-  return <TodoListsContext.Provider value={{ todoList, createTodo }}>{children}</TodoListsContext.Provider>;
+  const doneTodo = (index: number) => {
+    const addTodoDone = todoList.find((v) => v.id === index);
+    if (addTodoDone !== undefined) {
+      addTodoDone.doneDateTime = returnNowTime();
+      const revTodoDone = todoDone.length > 0 ? [...todoDone, addTodoDone] : [addTodoDone];
+      setTodoDone(revTodoDone);
+    }
+    const revTodoList = todoList.filter((v) => v.id !== index);
+    setTodoList(revTodoList);
+  };
+
+  return (
+    <TodoListsContext.Provider value={{ todoList, todoDone, createTodo, doneTodo }}>
+      {children}
+    </TodoListsContext.Provider>
+  );
 };

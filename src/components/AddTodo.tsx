@@ -4,6 +4,7 @@ import { TodoListType } from '../types/ProviderTodoListType';
 
 export const AddTodo = () => {
   const { createTodo } = useContext<TodoListType>(TodoListsContext);
+  console.log('AddTodo render()');
 
   return (
     <>

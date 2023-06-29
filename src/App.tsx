@@ -6,9 +6,10 @@ import { auth } from './lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Header } from './components/Header';
 import { SignUp } from './components/SignUp';
-import { TodoTasks } from './components/TodoTasks';
+import { TodoTask } from './components/TodoTask';
 import { TodoListsProvider } from './components/providers/TodoListsProviders';
 import { AddTodo } from './components/AddTodo';
+import { TodoDone } from './components/TodoDone';
 
 const intialUserInfo = {
   email: '',
@@ -55,7 +56,8 @@ export const App = memo(() => {
           <div>
             <Header userInfo={userInfo} isSignUp={isSignUp} />
             <AddTodo />
-            <TodoTasks />
+            <TodoTask />
+            <TodoDone />
           </div>
         )}
       </TodoListsProvider>
