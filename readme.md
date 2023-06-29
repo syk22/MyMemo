@@ -5,7 +5,7 @@
 ## Future Feature
 
 ### MVP
-- Done タスク/削除タスク  
+- 削除タスク  
 - データベース接続(Firestore)  
 - テスト(Jest)  
 
@@ -38,11 +38,9 @@
 
 ## Done
 ### MVP
-- 実行タスク  
-- ログイン  
-- ログアウト 　
+- 実行タスク / Done タスク  
+- ログイン / ログアウト 　
 - Component化
-
 
 ## stack
 - React(v18)  
