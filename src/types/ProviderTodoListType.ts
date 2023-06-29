@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
-import { ToDoFormat } from './ToDoFormat';
+import { TodoFormat } from './TodoFormat';
 
 export type TodoListType = {
-  todoList: ToDoFormat[];
+  todoList: TodoFormat[];
   createTodo: MouseEventHandler;
 };

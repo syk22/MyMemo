@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { TodoListsContext } from './providers/TodoListsProviders';
-import { ToDoFormat } from '../types/ToDoFormat';
+import { TodoFormat } from '../types/TodoFormat';
 
 export const List = () => {
   const { todoList } = useContext(TodoListsContext);
   let todoArray: JSX.Element[] | undefined;
   if (todoList.length > 0) {
-    todoArray = todoList.map((v: ToDoFormat) => {
+    todoArray = todoList.map((v: TodoFormat) => {
       return (
         <>
           <dt key={v.id.toString()}>{v.id.toString()}</dt>

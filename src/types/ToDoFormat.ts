@@ -1,4 +1,4 @@
-export type ToDoFormat = {
+export type TodoFormat = {
   value?: string;
   todoText?: string;
   readonly id: number;
